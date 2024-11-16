@@ -9,6 +9,8 @@ from elements.base_elements import Button
 from locators.locs_base_page import BasePageLocators
 from time import sleep
 
+# я только сейчас осознал что это походу автотесты) вот я говорю ридмишка должна быть первым файлом, хотя бы описать что это за приложение
+# понятно почему везде аллюр
 
 class BasePage:
 
@@ -28,13 +30,16 @@ class BasePage:
             return self.browser.refresh()
 
     def go_back(self):
-        """Возврат на предыдущую страницу, через кнопку в браузере!"""
+        """Возврат на предыдущую страницу, через кнопку в браузере!""" 
+        # это что за строка ничейная?)
         with allure.step('Click go back button in browser'):
             self.browser.back()
 
     def is_element_present(self, how, what):
         try:
-            WebDriverWait(self.browser, 10, 0.5).until(EC.presence_of_element_located((how, what)))
+            WebDriverWait(self.browser, 10, 0.5).until(EC.presence_of_element_located((how, what))) 
+            # // return True можно было бы тут закинуть. А если строка выше возвращает булеан можно сразу ее возвращать
+            # // ниже аналогично
         except NoSuchElementException:
             return False
         return True
@@ -89,10 +94,21 @@ class BasePage:
             return True
         return False
 
+
+# кусок try:
+#             WebDriverWait(self.browser, timeout).until(КАКАЯ ТО ФУНКЦИЯ)
+#         except TimeoutException:
+#             return True
+#         return False
+# повторяется повсеместно. Я бы вынес ее в отдельную функцию и в методах выше передавал в параметрах просто функцию которая вызывается
+# в .until() 
+    
     def send_keys_in_input(self, how, what, data):
-        input_1_value = None
+        input_1_value = None 
+        # тут тоже повторяется что и в елементс, непонятно зачем input_1_value инициализируется заранее 
         actions = AC(self.browser)
-        input_1 = self.browser.find_element(how, what)
+        input_1 = self.browser.find_element(how, what) 
+        # непонятное название, почему не просто input
         actions.double_click(input_1)
         actions.send_keys_to_element(input_1, data).perform()
         input_1_value = input_1.get_attribute("value")
@@ -109,6 +125,7 @@ class BasePage:
         element = None
         with allure.step(f'Поиск элемента по атрибуту: {attribute} и значению: {value}'):
             element = self.browser.find_element(By.XPATH, f"//*[normalize-space(@{attribute})='{value}']")
+            # мне кажется я пачку подобных елементов (By.XPATH, f"//*[normalize-space(@{attribute})='{value}']") видел вынесенными в loactors
         return element
 
     def click_action(self, x, y):  # Необходимо передать функции координаты точки, куда нужно кликнуть
