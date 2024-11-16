@@ -38,17 +38,20 @@ class CataloguePage(HeaderPage):
             self.is_element_visible(*CataloguePageLocators.PRODUCT_CARD)
             prod_cards_list = self.browser.find_elements(*CataloguePageLocators.PRODUCT_CARD)
             flag = True
+            # что бы заранее flag = True можно сразу юзать булеан While true: 
             count = 0
             while flag:
                 prod_card = choice(prod_cards_list)
                 info_list_in_prod_card = self.get_info_from_prod_card(prod_card)
                 for info in info_list_in_prod_card:
                     if info.lower() == "в наличии":
-                        flag = False
+                        flag = False 
+                        # а тут break для while сделать вместо flag = False 
                         break
                 count += 1
                 if count == 100:
                     flag = False
+                    # аналогично можно сделать break для while
             return prod_card
 
     @staticmethod
@@ -64,7 +67,8 @@ class CataloguePage(HeaderPage):
         prod_info = self.get_info_from_prod_card(element) # срез до точки
         price = None
         for info in prod_info:
-            if "цена" in info.lower():
+            if "цена" in info.lower(): 
+                # такие строки как "цена" лучше выносить в константы
                 price = info[:-1]
                 break
         return price
